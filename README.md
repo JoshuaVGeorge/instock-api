@@ -1,4 +1,6 @@
-# CREATE new database called instock
+# 1.Create a new DB called instock using the following command:
+## CREATE DATABASE instock;
 
-# Make sure to change the following paramters in the.env file
-### DB_HOST=instock
+# 2. Run the following npm scripts:
+## npm run migrate
+## npm run seed
