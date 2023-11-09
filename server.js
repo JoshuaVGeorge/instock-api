@@ -21,8 +21,8 @@ app.get("/", function (req, res) {
 });
 
 // Routes
-const warehouseRoutes = require("./routes/warehouse");
-app.use("/warehouse", warehouseRoutes);
+const warehouseRoutes = require("./routes/warehouses");
+app.use("/warehouses", warehouseRoutes);
 
 const inventoryRoutes = require("./routes/inventory");
 app.use("/inventory", inventoryRoutes);
