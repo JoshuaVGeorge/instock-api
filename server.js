@@ -17,15 +17,15 @@ app.use(express.json());
 
 // home route
 app.get("/", function (req, res) {
-	res.send("welcome to /");
+	res.send("welcome to instock-api");
 });
 
 // Routes
 const warehouseRoutes = require("./routes/warehouses");
 app.use("/warehouses", warehouseRoutes);
 
-const inventoryRoutes = require("./routes/inventory");
-app.use("/inventory", inventoryRoutes);
+const inventoryRoutes = require("./routes/inventories");
+app.use("/inventories", inventoryRoutes);
 
 app.listen(PORT, function () {
 	console.log("server up!");
