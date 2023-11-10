@@ -1,12 +1,23 @@
 const express = require("express");
 const knex = require("knex")(require("../knexfile"));
 const router = express.Router();
+const warehouseController = require('../controllers/warehouse-controller');
 
 router.get("/", (req, res) => {
 	res.send("welcome to warehouses");
 });
 
-router.route("/:id").get((req, res) => {
+router.route("/")
+.get((req, res) => {
+	res.send("welcome to warehouses");
+})
+.post(warehouseController.add);
+
+module.exports = router;
+
+
+router.route("/:id")
+.get((req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
 		.then((warehouse) => {
@@ -23,6 +34,7 @@ router.route("/:id").get((req, res) => {
 		.catch((err) => {
 			res.status(500).send(`${err}`);
 		});
-});
+})
+.patch(warehouseController.update);
 
 module.exports = router;
