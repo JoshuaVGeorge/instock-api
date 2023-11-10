@@ -10,10 +10,14 @@ router.route("/:id").get((req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
 		.then((warehouse) => {
+			let splicedWarehouse = warehouse.map(
+				({ created_at, updated_at, ...remainingProps }) => remainingProps
+			);
+
 			if (warehouse == false) {
 				res.status(400).send(`No warehouse id: ${req.params.id} found`);
 			} else {
-				res.status(200).send(warehouse);
+				res.status(200).send(splicedWarehouse);
 			}
 		})
 		.catch((err) => {
