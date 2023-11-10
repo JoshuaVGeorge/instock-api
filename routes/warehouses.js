@@ -3,18 +3,11 @@ const knex = require("knex")(require("../knexfile"));
 const router = express.Router();
 const warehouseController = require('../controllers/warehouse-controller');
 
-router.get("/", (req, res) => {
-	res.send("welcome to warehouses");
-});
-
 router.route("/")
 .get((req, res) => {
 	res.send("welcome to warehouses");
 })
 .post(warehouseController.add);
-
-module.exports = router;
-
 
 router.route("/:id")
 .get((req, res) => {
