@@ -22,10 +22,10 @@ app.get("/", function (req, res) {
 
 // Routes
 const warehouseRoutes = require("./routes/warehouses");
-app.use("/warehouses", warehouseRoutes);
+app.use("/api/warehouses", warehouseRoutes);
 
 const inventoryRoutes = require("./routes/inventories");
-app.use("/inventories", inventoryRoutes);
+app.use("/api/inventories", inventoryRoutes);
 
 app.listen(PORT, function () {
 	console.log("server up!");
