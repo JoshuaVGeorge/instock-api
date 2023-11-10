@@ -10,12 +10,15 @@ router.route("/:id").get((req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
 		.then((warehouse) => {
-			res.status(200).json(warehouse);
+			if (warehouse == false) {
+				res.status(400).send(`No warehouse id: ${req.params.id} found`);
+			} else {
+				res.status(200).send(warehouse);
+			}
 		})
-		.catch(() => {
-			res.status(400).json({
-				message: `Error getting warehouse ${req.params.id}`,
-			});
+		.catch((err) => {
+			res.status(500).send(`${err}`);
 		});
 });
+
 module.exports = router;
