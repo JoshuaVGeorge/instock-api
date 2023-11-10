@@ -15,7 +15,7 @@ router.route("/:id").get((req, res) => {
 			);
 
 			if (warehouse == false) {
-				res.status(400).send(`No warehouse id: ${req.params.id} found`);
+				res.status(404).send(`No warehouse id: ${req.params.id} found`);
 			} else {
 				res.status(200).send(splicedWarehouse);
 			}
