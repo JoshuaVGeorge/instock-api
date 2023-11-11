@@ -27,6 +27,26 @@ const add = (req, res) => {
       })
   };
 
+  const update = (req, res) => {
+    knex("warehouses")
+      .where({ id: req.params.id })
+      .update(req.body)
+      .then(() => {
+        return knex("warehouses").where({
+          id: req.params.id,
+        });
+      })
+      .then((updatedWarehouse) => {
+        res.json(updatedWarehouse[0]);
+      })
+      .catch(() => {
+        res
+          .status(500)
+          .json({ message: `Unable to update user with ID: ${req.params.id}` });
+      });
+  };
+
   module.exports = {
-    add
+    add,
+    update
   }
