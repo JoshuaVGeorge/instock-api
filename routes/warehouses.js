@@ -1,5 +1,4 @@
 const express = require("express");
-const knex = require("knex")(require("../knexfile"));
 const router = express.Router();
 const warehouseController = require("../controllers/warehouse-controller");
 
