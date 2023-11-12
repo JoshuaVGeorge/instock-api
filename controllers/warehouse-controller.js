@@ -19,6 +19,27 @@ const getWarehouseID = (req, res) => {
 		});
 };
 
+const getWarehouseInventory = (req, res) => {
+	knex("warehouses")
+		.where({ id: req.params.id })
+		.then((warehouse) => {
+			if (warehouse == false) {
+				res.status(404).send(`warehouse id: ${req.params.id} not found`);
+			} else {
+				knex("inventories as i")
+					.join("warehouses as w", "w.id", "i.warehouse_id")
+					.select("i.id", "i.item_name", "i.category", "i.status", "i.quantity")
+					.where({ "w.id": req.params.id })
+					.then((inventory) => {
+						res.status(200).send(inventory);
+					})
+					.catch((err) => {
+						res.status(500).send(`${err}`);
+					});
+			}
+		});
+};
+
 const add = (req, res) => {
 	if (!req.body.contact_name || !req.body.contact_email) {
 		return res
@@ -71,6 +92,7 @@ const update = (req, res) => {
 
 module.exports = {
 	getWarehouseID,
+	getWarehouseInventory,
 	add,
 	update,
 };
