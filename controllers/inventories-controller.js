@@ -21,19 +21,23 @@ const getAllItems = (req, res) => {
 };
 
 const getItemByWarehouse = (req, res) => {
-	knex("warehouses as w")
-		.join("inventories as i", "w.id", "i.warehouse_id")
-		.select(
-			"i.id",
-			"i.item_name",
-			"i.category",
-			"i.status",
-			"i.quantity",
-			"w.warehouse_name"
-		)
-		.where({ "w.id": req.params.id })
-		.then((data) => {
-			res.send(data);
+	knex("warehouses")
+		.where({ id: req.params.id })
+		.then((warehouse) => {
+			if (warehouse == false) {
+				res.status(404).send(`warehouse id: ${req.params.id} not found`);
+			} else {
+				knex("inventories as i")
+					.join("warehouses as w", "w.id", "i.warehouse_id")
+					.select("i.id", "i.item_name", "i.category", "i.status", "i.quantity")
+					.where({ "w.id": req.params.id })
+					.then((inventory) => {
+						res.status(200).send(inventory);
+					})
+					.catch((err) => {
+						res.status(500).send(`${err}`);
+					});
+			}
 		});
 };
 
