@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const warehouseController = require("../controllers/warehouse-controller");
-const inventoriesController = require("../controllers/inventories-controller");
 
 router
 	.route("/")
@@ -15,6 +14,6 @@ router
 	.get(warehouseController.getWarehouseID)
 	.patch(warehouseController.update);
 
-router.route("/:id/inventories").get(inventoriesController.getItemByWarehouse);
+router.route("/:id/inventories").get(warehouseController.getWarehouseInventory);
 
 module.exports = router;
