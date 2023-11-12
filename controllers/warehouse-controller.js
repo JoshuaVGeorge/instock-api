@@ -1,6 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 
-const get = (req, res) => {
+const getWarehouseID = (req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
 		.then((warehouse) => {
@@ -16,6 +16,27 @@ const get = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send(`${err}`);
+		});
+};
+
+const getWarehouseInventory = (req, res) => {
+	knex("warehouses")
+		.where({ id: req.params.id })
+		.then((warehouse) => {
+			if (warehouse == false) {
+				res.status(404).send(`warehouse id: ${req.params.id} not found`);
+			} else {
+				knex("inventories as i")
+					.join("warehouses as w", "w.id", "i.warehouse_id")
+					.select("i.id", "i.item_name", "i.category", "i.status", "i.quantity")
+					.where({ "w.id": req.params.id })
+					.then((inventory) => {
+						res.status(200).send(inventory);
+					})
+					.catch((err) => {
+						res.status(500).send(`${err}`);
+					});
+			}
 		});
 };
 
@@ -70,7 +91,8 @@ const update = (req, res) => {
 };
 
 module.exports = {
-	get,
+	getWarehouseID,
+	getWarehouseInventory,
 	add,
 	update,
 };
