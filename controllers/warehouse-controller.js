@@ -1,6 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 
-const get = (req, res) => {
+const getWarehouseID = (req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
 		.then((warehouse) => {
@@ -70,7 +70,7 @@ const update = (req, res) => {
 };
 
 module.exports = {
-	get,
+	getWarehouseID,
 	add,
 	update,
 };
