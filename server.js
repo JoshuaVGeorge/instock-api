@@ -28,5 +28,5 @@ const inventoryRoutes = require("./routes/inventories");
 app.use("/api/inventories", inventoryRoutes);
 
 app.listen(PORT, function () {
-	console.log("server up!");
+	console.log("Instock-api launched!");
 });
