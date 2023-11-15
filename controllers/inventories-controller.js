@@ -20,6 +20,22 @@ const getAllItems = (req, res) => {
 		});
 };
 
+const getSingleItem = (req, res) => {
+	knex("inventories")
+		.where({ id: req.params.id })
+		.then((item) => {
+			if (item == null) {
+				res.status(404).send(`Item id: ${req.params.id} not found`);
+			} else {
+				res.status(200).send(item);
+			}
+		})
+		.catch((err) => {
+			res.status(500).send(`${err}`);
+		});
+};
+
 module.exports = {
 	getAllItems,
+	getSingleItem
 };
