@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 const knex = require("knex")(require("../knexfile"));
 
 const getAllItems = (req, res) => {
@@ -56,36 +58,49 @@ const deleteSingleItem = (req, res) => {
 
 const updateSingleItem = (req, res) => {
   if (
-    !req.body.item_name ||
-    !req.body.description ||
-    !req.body.category ||
-    !req.body.status ||
-    !req.body.quantity
+    (!req.body.item_name,
+    !req.body.description,
+    !req.body.category,
+    !req.body.status,
+    !req.body.quantity)
   ) {
-    return res.status(400).send("Please complete all the input fields ");
+    res.status(400).send("Please fill in all fields");
+    return;
   }
-  if (typeof req.body.quantity !== typeof 1) {
-    return res.status(400);
+
+  if (isNaN(req.body.quantity)) {
+    res.status(400).send("Please enter a number");
+    return;
   }
+
   knex("warehouses")
     .where({ id: req.body.warehouse_id })
-    .then((item) => {
-      if (item == null) {
-        res.status(400).send(`warehouse id wasn't found`);
+    .then((response) => {
+      if (response.length === 0) {
+        res.status(400).send("warehouse not found");
+        return;
       }
-    });
-
-  knex("invenotries")
-    .where({ id: req.params.id })
-    .update(req.body)
-    .then(() => {
-      return knex("inventories").where({ id: req.param.id });
-    })
-    .then((updatedInventoryItem) => {
-      res.json(updatedInventoryItem[0]);
-    })
-    .catch((error) => {
-      res.status(500).json({ message: `Unable to update Inventory item` });
+      return knex("inventories")
+        .where({ id: req.params.id })
+        .select("id")
+        .then((response) => {
+          if (response.length === 0) {
+            res.status(404).send("inventory item not found");
+            return;
+          }
+          return knex("inventories")
+            .where({ id: req.params.id })
+            .update(req.body);
+        })
+        .then(() => {
+          return knex("inventories").where({ id: req.params.id });
+        })
+        .then((updatedItem) => {
+          res.json(updatedItem[0]);
+        })
+        .catch(() => {
+          res.status(500);
+        });
     });
 };
 
@@ -95,3 +110,49 @@ module.exports = {
   deleteSingleItem,
   updateSingleItem,
 };
+
+// const updateSingleItem = (req, res) => {
+//   if (
+//     !req.body.warehouse_id ||
+//     !req.body.item_name ||
+//     !req.body.description ||
+//     !req.body.category ||
+//     !req.body.status ||
+//     !req.body.quantity
+//   ) {
+//     res.status(400).send("Please fill in all fields");
+//     return;
+//   }
+
+//   if (isNaN(req.body.quantity)) {
+//     res.status(400).send("Input requires numbers only");
+//     return;
+//   }
+
+//   knex("warehouses")
+//     .where({ id: req.body.warehouse_id })
+//     .then((id) => {
+//       if (id.length === 0) {
+//         res.status(400).send("warehouse id not valid");
+//         return;
+//       }
+//       return knex("inventories").where({ id: req.params.id }).select("id");
+//     })
+//     .then((inventoryColumn) => {
+//       if (inventoryColumn.length === 0) {
+//         res.status(404).send("inventory item not found");
+//         return;
+//       }
+//       return knex("inventories").where({ id: req.params.id }).update(req.body);
+//     })
+//     .then(() => {
+//       return knex("inventories").where({ id: req.params.id });
+//     })
+//     .then((updatedItem) => {
+//       res.json(updatedItem[0]);
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.status(500);
+//     });
+// };
