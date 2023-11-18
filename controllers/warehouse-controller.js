@@ -2,7 +2,6 @@ const knex = require("knex")(require("../knexfile"));
 
 const getAllWarehouses = (req, res) => {
 	knex("warehouses as w")
-		.join("warehouses as w", "w.id", "i.warehouse_id")
 		.select(
 			"w.id",
 			"w.warehouse_name",
@@ -19,8 +18,8 @@ const getAllWarehouses = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send(`${err}`);
-		})
-}
+		});
+};
 
 const getWarehouseID = (req, res) => {
 	knex("warehouses")

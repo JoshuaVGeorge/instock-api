@@ -4,9 +4,7 @@ const warehouseController = require("../controllers/warehouse-controller");
 
 router
 	.route("/")
-	.get((req, res) => {
-		res.send("welcome to warehouses");
-	})
+	.get(warehouseController.getAllWarehouses)
 	.post(warehouseController.add);
 
 router
