@@ -135,5 +135,6 @@ module.exports = {
 	getWarehouseID,
 	getWarehouseInventory,
 	add,
+	deleteWarehouse,
 	update,
 };
