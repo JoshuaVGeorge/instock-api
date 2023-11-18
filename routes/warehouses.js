@@ -5,12 +5,12 @@ const warehouseController = require("../controllers/warehouse-controller");
 router
 	.route("/")
 	.get(warehouseController.getAllWarehouses)
-	.delete(warehouseController.deleteWarehouse)
 	.post(warehouseController.add);
 
 router
 	.route("/:id")
 	.get(warehouseController.getWarehouseID)
+	.delete(warehouseController.deleteWarehouse)
 	.patch(warehouseController.update);
 
 router.route("/:id/inventories").get(warehouseController.getWarehouseInventory);
