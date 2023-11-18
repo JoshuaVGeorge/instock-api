@@ -1,5 +1,26 @@
 const knex = require("knex")(require("../knexfile"));
 
+const getAllWarehouses = (req, res) => {
+	knex("warehouses as w")
+		.select(
+			"w.id",
+			"w.warehouse_name",
+			"w.address",
+			"w.city",
+			"w.country",
+			"w.contact_name",
+			"w.contact_position",
+			"w.contact_phone",
+			"w.contact_email"
+		)
+		.then((data) => {
+			res.status(200).send(data);
+		})
+		.catch((err) => {
+			res.status(500).send(`${err}`);
+		});
+};
+
 const getWarehouseID = (req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
@@ -71,6 +92,25 @@ const add = (req, res) => {
 		});
 };
 
+const deleteWarehouse =  (req, res) => {
+	knex("warehouses")
+	  .where({ id: req.params.id })
+	  .del()
+	  .then((result) => {
+		if (result === 0) {
+		  return res.status(400).json({
+			message: `Warehouse with name: ${req.params.id} to be deleted not found.`,
+		  });
+		}
+  
+		// no content response
+		res.status(204).send();
+	  })
+	  .catch(() => {
+		res.status(500).json({ message: "Unable to delete warehouse" });
+	  });
+  };
+
 const update = (req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
@@ -91,6 +131,7 @@ const update = (req, res) => {
 };
 
 module.exports = {
+	getAllWarehouses,
 	getWarehouseID,
 	getWarehouseInventory,
 	add,
