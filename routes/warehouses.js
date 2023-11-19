@@ -4,14 +4,15 @@ const warehouseController = require("../controllers/warehouse-controller");
 
 router
 	.route("/")
-	.get((req, res) => {
-		res.send("welcome to warehouses");
-	})
+	.get(warehouseController.getAllWarehouses)
 	.post(warehouseController.add);
 
 router
 	.route("/:id")
-	.get(warehouseController.get)
+	.get(warehouseController.getWarehouseID)
+	.delete(warehouseController.deleteWarehouse)
 	.patch(warehouseController.update);
+
+router.route("/:id/inventories").get(warehouseController.getWarehouseInventory);
 
 module.exports = router;
