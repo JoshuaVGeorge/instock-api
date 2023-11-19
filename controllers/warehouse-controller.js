@@ -40,6 +40,47 @@ const getWarehouseID = (req, res) => {
 		});
 };
 
+const sortWarehouseAscending = (req, res) => {
+	knex("warehouses as w")
+	.select(
+		"w.warehouse_name",
+		"w.address",
+		"w.city",
+		"w.country",
+		"w.contact_name",
+		"w.contact_position",
+		"w.contact_phone",
+		"w.contact_email"
+	)
+	.orderBy('w.warehouse_name', 'asc' )
+	.orderBy('w.address', 'asc' )
+	.orderBy('w.city', 'asc' )
+	.orderBy('w.country', 'asc' )
+	.orderBy('w.contact_name', 'asc' )
+	.then((data) => {
+		if (req.params == warehouse) {
+			res.status(200).send(data.warehouse_name);
+		}
+	})
+	
+}
+
+const getAscendingWarehouse = (req, res) => {
+	knex("warehouses as w")
+	.select('w.warehouse_name')
+	.orderBy('warehouse_name', 'asc')
+	.then((data) => {
+		res.status(200).send(data);
+	})
+}
+const getDescendingWarehouse = (req, res) => {
+	knex("warehouses as w")
+	.select('w.warehouse_name')
+	.orderBy('warehouse_name', 'desc')
+	.then((data) => {
+		res.status(200).send(data);
+	})
+}
 const getWarehouseInventory = (req, res) => {
 	knex("warehouses")
 		.where({ id: req.params.id })
@@ -131,6 +172,7 @@ const update = (req, res) => {
 };
 
 module.exports = {
+	sortWarehouseAscending,
 	getAllWarehouses,
 	getWarehouseID,
 	getWarehouseInventory,
