@@ -58,10 +58,10 @@ const deleteSingleItem = (req, res) => {
 
 const updateSingleItem = (req, res) => {
   if (
-    (!req.body.item_name,
-    !req.body.description,
-    !req.body.category,
-    !req.body.status,
+    (!req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
     !req.body.quantity)
   ) {
     res.status(400).send("Please fill in all fields");
