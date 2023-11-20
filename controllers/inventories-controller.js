@@ -105,17 +105,17 @@ const updateSingleItem = (req, res) => {
 };
 
 const createNewItem = (req, res) => {
+  console.log(req.body);
   if (
-    (!req.body.item_name,
-    !req.body.description,
-    !req.body.category,
-    !req.body.status,
-    !req.body.quantity)
+    !req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
+    !req.body.quantity
   ) {
     res.status(400).send("Please fill in all fields");
     return;
   }
-
   if (isNaN(req.body.quantity)) {
     res.status(400).send("Please enter a number");
     return;
@@ -123,18 +123,21 @@ const createNewItem = (req, res) => {
   knex("warehouses")
     .where({ id: req.body.warehouse_id })
     .then((result) => {
+      console.log({ result });
       if (result.length === 0) {
         res.status(400).send("warehouse not found");
         return;
       }
-      return knex("inventories")
+      knex("inventories")
         .insert(req.body)
         .then((result) => {
+          console.log(`added  item successfully ${result}`);
           return knex("inventories").where({ id: result[0] });
+        })
+        .then((newItem) => {
+          res.status(201).json(newItem);
+          return newItem;
         });
-    })
-    .then((newItem) => {
-      res.status(201).json(newItem);
     })
     .catch(() => {
       res.status(500);
