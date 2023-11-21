@@ -61,6 +61,7 @@ const updateSingleItem = (req, res) => {
     (!req.body.item_name ||
     !req.body.description ||
     !req.body.category ||
+    req.body.category == "Please Select" ||
     !req.body.status ||
     !req.body.quantity)
   ) {
@@ -105,7 +106,6 @@ const updateSingleItem = (req, res) => {
 };
 
 const createNewItem = (req, res) => {
-  console.log(req.body);
   if (
     !req.body.item_name ||
     !req.body.description ||
